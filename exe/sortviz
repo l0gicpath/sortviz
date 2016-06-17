@@ -1,0 +1,4 @@
+#! /usr/bin/env ruby
+
+require "sortviz"
+Sortviz::VisualSorter.new
