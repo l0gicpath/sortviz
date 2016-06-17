@@ -1,16 +1,17 @@
 require 'curses'
 require "sortviz/version"
 require "sortviz/cursor"
+require "sortviz/tui"
 
 module Sortviz
   class VisualSorter
     def initialize
       setup
       @screen = Curses.stdscr
-      @cursor = Cursor.new(@screen, 1.5, 5)
+      @cursor = Sortviz::Cursor.new(@screen, 1, 5)
       run
     end
-    
+
     def bubble_sort2(list)
       return list if list.size <= 1 # already sorted
       loop do
@@ -56,7 +57,7 @@ module Sortviz
     end
 
     def newline
-      @cursor.move_y_by 1
+      @cursor.incr_y
     end
 
 
@@ -70,25 +71,25 @@ module Sortviz
         newline
         canvas = Curses::Window.new(@cursor.y + 20, Curses.cols - 50, @cursor.y, @cursor.x)
         color_pair = Curses.color_pair(Curses.const_get("COLOR_RED"))
-        @cursor.switch_to canvas
+        @cursor.switch_window canvas
         canvas.nodelay = 1
         @screen.refresh
         loop do
           bubble_sort2(list) do |new_list, selection|
             canvas.clear
             canvas.box('|', '--')
-            @cursor.move_to(canvas.maxy - 2, 5)
+            @cursor.move(canvas.maxy - 2, 5)
             new_list.each_index do |i|
               tprint(("|%02d|" % new_list[i]), canvas)
-              @cursor.move_y_by(-1)
-              canvas.attron(color_pair) if selection  == i
+              @cursor.decr_y
+              canvas.attron(color_pair) if selection + 1  == i
               new_list[i].times do 
                 tprint("|_ |", canvas)
-                @cursor.move_y_by -1
+                @cursor.decr_y
               end
               canvas.attroff(color_pair)
               @cursor.move_y(canvas.maxy - 2)
-              @cursor.move_x_by 5
+              @cursor.incr_x 5
             end
             Curses.doupdate
             sleep(1.02)
