@@ -82,7 +82,7 @@ module Sortviz
     def banner
       tprint("-----------------------------------------------------------------")
       newline
-      tprint("SortViz: Sorting Algorithms Visualization, Ruby & Curses - v0.2.0")
+      tprint("SortViz: Sorting Algorithms Visualization, Ruby & Curses - v#{VERSION}")
       newline
       tprint("-----------------------------------------------------------------")
       newline
