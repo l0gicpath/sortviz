@@ -93,6 +93,14 @@ module Sortviz
       move(coords[:y], coords[:x]) unless coords.empty?
     end
 
+    def tprint(string)
+      @window.addstr(string)
+    end
+
+    def newline
+      incr_y
+    end
+
     private
     def update(y, x)
       @y, @x = y, x
