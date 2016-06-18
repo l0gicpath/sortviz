@@ -1,9 +1,10 @@
 require 'curses'
-require "sortviz/version"
-require "sortviz/cursor"
-require "sortviz/canvas"
-require "sortviz/visualizer"
-require "sortviz/plugins"
+require 'forwardable'
+require 'sortviz/version'
+require 'sortviz/cursor'
+require 'sortviz/canvas'
+require 'sortviz/visualizer'
+require 'sortviz/plugins'
 
 dir = './algorithms'
 $LOAD_PATH.unshift(dir)
