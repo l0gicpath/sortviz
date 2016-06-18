@@ -19,7 +19,6 @@ module Sortviz
       @title = title
       # Cache red since we'll use it to highlight later, best do it now
       @red_highlighter = Curses.color_pair(Curses.const_get("COLOR_RED"))
-      @gray_highlighter = Curses.color_pair(GRAY_COLOR)
       @window = nil
     end
 
@@ -41,10 +40,7 @@ module Sortviz
       @cursor.tprint("Algorithm: #{@title}")
       @cursor.move(CANVAS_HEIGHT + 2, GUTTER)
       partially_sorted.each_with_index do |n, i|
-        
-        attron(@gray_highlighter)
         tprint(("|%02d|" % n))
-        attroff(@gray_highlighter)
 
         @cursor.decr_y
 
