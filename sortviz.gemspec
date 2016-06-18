@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Terminal based sorting algorithms visualizer}
   spec.description   = %q{Visualize sorting algorithms with Ruby and Curses lib}
-  spec.homepage      = "http://hadyahmed.com/sortviz"
+  spec.homepage      = "http://hadyahmed.com"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }

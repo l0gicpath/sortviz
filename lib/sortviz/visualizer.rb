@@ -27,7 +27,7 @@ module Sortviz
     def visualize
       begin
         banner
-        # NOTICE: :Cavet: It's important to setup the canvas AFTER displaying
+        # NOTICE: :caveat: It's important to setup the canvas AFTER displaying
         # the banner, so the canvas would correctly calculate its offsets
         # based on the current cursor position, as in, after printing banner
         @canvas.setup
