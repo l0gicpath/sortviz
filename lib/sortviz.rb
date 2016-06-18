@@ -5,10 +5,7 @@ require 'sortviz/cursor'
 require 'sortviz/canvas'
 require 'sortviz/visualizer'
 require 'sortviz/plugins'
-
-dir = './algorithms'
-$LOAD_PATH.unshift(dir)
-Dir[File.join(dir, '*.rb')].each {|file| require File.basename(file) }
+Dir[File.join('algorithms', '*.rb')].each {|file| require File.basename(file) }
 
 module Sortviz
   extend self
