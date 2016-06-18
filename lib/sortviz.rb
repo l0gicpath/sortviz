@@ -5,7 +5,9 @@ require 'sortviz/cursor'
 require 'sortviz/canvas'
 require 'sortviz/visualizer'
 require 'sortviz/plugins'
-Dir[File.join('algorithms', '*.rb')].each {|file| require File.basename(file) }
+
+libdir = File.dirname(__FILE__) 
+Dir[libdir + '/algorithms/*.rb'].each {|file| require file }
 
 module Sortviz
   extend self
