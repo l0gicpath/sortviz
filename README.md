@@ -8,6 +8,9 @@ It also has a rather over simplified plugin architecture, more like a ruby
 trick than anything. You can write your own sorting code and have it visualize
 that for you. You just need to follow a general principle.
 
+## Looks like this
+![alt text][screenshot]
+
 ## Working with Sortviz
 
 Some sorting algorithms operate on single lists, swapping and sifting through
@@ -87,3 +90,4 @@ I wouldn't know why wouldn't you like MIT license but just in case you don't,
 don't ping me saying it sucks. Ping bundler, they make it absurdly easy not to
 think about licensing when creating a new Gem.
 
+[screenshot]: screenshot.png "Mac OSX Terminal.app xterm-256color"

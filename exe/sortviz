@@ -14,9 +14,12 @@ Exit: Use 'q' to exit during visualization
   HELP
 
   opts.on('-s', '--sort ALGORITHM', 'Visualize sorting ALGORITHM (Default: bubblesort)') do |algo|
-    Sortviz.init(algo.to_sym) if Sortviz::ALGORITHMS.has_key? algo.to_sym
-    puts "We couldn't find this algorithm, please check available algorithms through -l option"
-    exit
+    if Sortviz::ALGORITHMS.has_key? algo.to_sym
+      Sortviz.init(algo.to_sym)
+    else
+      puts "We couldn't find this algorithm, please check available algorithms through -l option"
+      exit
+    end
   end
 
   opts.on('-l', '--list', 'List of available sorting algorithms') do
