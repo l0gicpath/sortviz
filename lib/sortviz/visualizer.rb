@@ -74,9 +74,8 @@ module Sortviz
       Curses.start_color        # Kick off colored output
       Curses.use_default_colors
 
-      # We need Red and Gray
+      # We need Red
       Curses.init_pair(Curses::COLOR_RED, Curses::COLOR_RED, -1)
-      Curses.init_pair(8, 235, -1)
     end
 
     def banner
