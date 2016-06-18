@@ -3,31 +3,25 @@ module Sortviz
   # happens. It initializes the curses library, visualizes sorting, 
   # cleans up after we're done and controls the event loop.
   class Visualizer
+    extend Forwardable
+    def_delegators :@cursor, :tprint, :newline 
     # All our rendering kicks off from these two values, consider them
     # our origin point instead of (0, 0)
     GUTTER = 5          # We don't want to flirt too much with the terminal border
     TOP_MARGIN = 1      # Same issue with the top border
-    SLEEP_INTERVAL = 0.003
+    SLEEP_INTERVAL = 0.3
 
-    def initialize(unsorted_list)
+    def initialize(unsorted_list, algo)
       setup_curses
       # Cache our dimensions, helpful in calculations
       @screen_dim = { cols: Curses.cols, lines: Curses.lines }
       # Take Reference for Curses initial standard window
       @screen     = Curses.stdscr
-      @cursor     = Sortviz::Cursor.new(@screen, TOP_MARGIN, GUTTER)
-      @canvas     = Sortviz::Canvas.new(@cursor, @screen_dim)
+      @cursor     = Cursor.new(@screen, TOP_MARGIN, GUTTER)
+      @canvas     = Canvas.new(ALGORITHMS[algo], @cursor, @screen_dim)
 
+      @algo       = algo
       @unsorted_list = unsorted_list
-    end
-
-    def bubble_sort(list)
-      list.each_index do |i|
-        (list.length - i - 1).times do |j|
-          list[j], list[j + 1] = list[j + 1], list[j] if list[j] > list[j + 1]
-          yield list, j
-        end
-      end
     end
 
     def visualize
@@ -45,7 +39,7 @@ module Sortviz
         @cursor.switch_window @canvas.window
 
         loop do
-           bubble_sort(@unsorted_list) do |partially_sorted, selected_indx|
+           Sortviz.send(@algo, @unsorted_list) do |partially_sorted, selected_indx|
             @canvas.redraw(partially_sorted, selected_indx)
             update
             return if @canvas.getch == 'q'
@@ -92,15 +86,6 @@ module Sortviz
       newline
       tprint("-----------------------------------------------------------------")
       newline
-    end
-
-    def newline
-      @cursor.incr_y
-    end
-
-    def tprint(string)
-      window = @cursor.window
-      window.addstr(string)
     end
 
   end

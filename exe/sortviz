@@ -1,4 +1,36 @@
 #! /usr/bin/env ruby
 
+require 'optparse'
 require "sortviz"
-Sortviz.init
+
+options = {}
+
+oparser = OptionParser.new do |opts|
+  opts.banner = <<-HELP
+USAGE: sortviz [options]
+
+Exit: Use 'q' to exit during visualization
+
+  HELP
+
+  opts.on('-s', '--sort ALGORITHM', 'Visualize sorting ALGORITHM (Default: bubblesort)') do |algo|
+    Sortviz.init(algo.to_sym) if Sortviz::ALGORITHMS.has_key? algo.to_sym
+    puts "We couldn't find this algorithm, please check available algorithms through -l option"
+    exit
+  end
+
+  opts.on('-l', '--list', 'List of available sorting algorithms') do
+    puts "Sortviz: List of available algorithms"
+    puts "-------------------------------------"
+    Sortviz::ALGORITHMS.each do |func_name, name|
+      puts "  #{name} (-s #{func_name})"
+    end
+  end
+
+  opts.on('-h', '--help', 'View this help') do
+    puts opts
+    exit
+  end
+end
+
+oparser.parse!(ARGV)
