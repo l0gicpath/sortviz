@@ -10,10 +10,14 @@ module Sortviz
         @plugins ||= []
       end
 
+      def do_sort(index, unsorted_list, &renderblock)
+        plugins[index][:sort].call(unsorted_list, &renderblock)
+      end
+
       private
 
-      def sort(&sort_block)
-        plugins.last[:sort] = sort_block
+      def sort
+        Algorithms.plugins.last[:sort] = Proc.new
       end
 
       def name(name)

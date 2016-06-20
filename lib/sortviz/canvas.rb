@@ -11,10 +11,10 @@ module Sortviz
     # Initializes a new instance with a title to display, the current cursor
     # object (<tt>Sortviz::Cursor</tt>) and the modified screen dimensions from the
     # parent window/screen (standard screen created in <tt>Sortviz::Visualizer</tt>)
-    def initialize(title, cursor, screen_dim)
+    def initialize(algorithm, cursor, screen_dim)
       @screen_dim = screen_dim
       @cursor = cursor
-      @title = title
+      @title = Algorithms.plugins[algorithm][:display_name]
       @red_highlight = Curses.color_pair(Curses.const_get("COLOR_RED"))
     end
 

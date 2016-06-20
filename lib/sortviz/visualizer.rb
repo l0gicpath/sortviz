@@ -13,20 +13,22 @@ module Sortviz
   class Visualizer
     # Origin starts at (1, 0) not (0, 0)
     ORIGIN = { y: 1, x: 5 }
-    SLEEP_INTERVAL = 0.05
 
     # Initializes a new Visualizer for a sorting algorithm
     #
     # Params:
     # +algo+:: <tt>Symbol</tt> A symbol representing a sorting algorithm method
-    def initialize(algo)
+    def initialize(args)
       setup_curses
       @screen_dim = { cols: Curses.cols - ORIGIN[:x], lines: Curses.lines }
       @screen     = Curses.stdscr
       @cursor     = Cursor.new(@screen, ORIGIN)
-      @canvas     = Canvas.new(ALGORITHMS[algo], @cursor, @screen_dim)
 
-      @algo       = algo
+      @algorithm  = args.algorithm
+
+      @canvas     = Canvas.new(@algorithm, @cursor, @screen_dim)
+
+      @sorting_speed = args.speed
       @unsorted_list = generate_list
     end
 
@@ -70,12 +72,12 @@ module Sortviz
         @cursor.switch_window @canvas.window
 
         loop do
-           Sortviz.send(@algo, @unsorted_list) do |partially_sorted, selected_indx|
+          Algorithms.do_sort(@algorithm, @unsorted_list) do |partially_sorted, selected_indx|
             @canvas.redraw(partially_sorted, selected_indx)
             Curses.doupdate
-            sleep SLEEP_INTERVAL
+            sleep @sorting_speed
             return if @canvas.getch
-           end
+          end
           @cursor.switch_window @screen # Switch back to our stdscr
           @cursor.restore # Restoring here, would place us right under the canvas box
           @cursor.newline

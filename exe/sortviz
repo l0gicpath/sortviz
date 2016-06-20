@@ -10,37 +10,58 @@
 require 'optparse'
 require "sortviz"
 
-options = {}
+Options = Struct.new(:algorithm, :speed, :path)
+args = Options.new(:'bubble-sort', 0.05)
 
-oparser = OptionParser.new do |opts|
-  opts.banner = <<-HELP
-USAGE: sortviz [options]
+@parser = OptionParser.new do |opts|
+  opts.banner = 'Usage: sortviz [options] sorting_algorithm_name'
 
-Exit: Use 'q' to exit during visualization
-
-  HELP
-
-  opts.on('-s', '--sort ALGORITHM', 'Visualize sorting ALGORITHM (Default: bubblesort)') do |algo|
-    if Sortviz::ALGORITHMS.has_key? algo.to_sym
-      Sortviz.init(algo.to_sym)
-    else
-      puts "We couldn't find this algorithm, please check available algorithms through -l option"
-      exit
-    end
+  opts.on('-sSPEED', '--sorting-speed=SPEED', OptionParser::DecimalNumeric, 'Set the sorting speed in seconds') do |speed|
+    args.speed = speed
   end
 
   opts.on('-l', '--list', 'List of available sorting algorithms') do
     puts "Sortviz: List of available algorithms"
     puts "-------------------------------------"
-    Sortviz::ALGORITHMS.each do |func_name, name|
-      puts "  #{name} (-s #{func_name})"
+    Sortviz::Algorithms.plugins.each do |plugin|
+      print "#{plugin[:display_name]} \n"
+      print "\t Use as: sortviz #{plugin[:name]} \n"
+      print "\t Author: #{plugin[:author]} \n"
     end
+    exit
   end
 
-  opts.on('-h', '--help', 'View this help') do
+  opts.on_tail('-h', '--help', 'Show this message') do
     puts opts
+    exit
+  end
+
+  opts.on_tail('--version', 'Show version') do
+    puts "Sortviz v#{Sortviz::VERSION}"
     exit
   end
 end
 
-oparser.parse!(ARGV)
+def show_help(message = nil)
+  print "#{message} \n\n" unless message.nil?
+  puts @parser
+  exit -1
+end
+
+if ARGV.empty?
+  show_help
+else
+  begin
+    @parser.parse!(ARGV)
+  rescue OptionParser::MissingArgument => missing
+    print "Error: #{missing.to_s} \n\n"
+    show_help
+  end
+
+  algorithm = Sortviz.find_algorithm(ARGV.pop)
+  show_help("Error: Please specify the algorithm name") if algorithm.nil?
+
+  args.algorithm = algorithm
+
+  Sortviz.init(args)
+end

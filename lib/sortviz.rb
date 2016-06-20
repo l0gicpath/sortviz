@@ -11,8 +11,14 @@ Dir[libdir + '/algorithms/*.rb'].each {|file| require file }
 
 module Sortviz
   extend self
-  def init(algo)
-    visualizer = Visualizer.new algo
+
+  def find_algorithm(algorithm)
+    return nil if algorithm.nil?
+    Algorithms.plugins.find_index { |plugin| plugin[:name] == algorithm.to_sym }
+  end
+
+  def init(args)
+    visualizer = Visualizer.new args
     visualizer.visualize
   end
 end
