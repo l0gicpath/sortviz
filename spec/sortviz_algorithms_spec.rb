@@ -7,8 +7,9 @@ describe Sortviz::Algorithms do
   subject { Sortviz::Algorithms }
 
   it 'should create a new algorithm entry with the name given to #define' do
+    oldcount = subject.plugins.length # Doing so because We already load 3 built in plugins, need to fix this
     subject.define('Fake Sort') {}
-    expect(subject.plugins.length).to eq(1)
+    expect(subject.plugins.length).to eq(oldcount + 1) 
   end
 
   it 'should evaluate the block given to #define in the context of Sortviz::Algorithms' do
