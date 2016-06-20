@@ -1,23 +1,24 @@
 module Sortviz
   # Visualizer is the entry point of Sortviz, given an algorithm name it'll
-  # initialize Curses library, a +Sortviz::Canvas+ with proper screen dimensions
-  # and a +Sortviz::Cursor+.
+  # initialize Curses library, a <tt>Sortviz::Canvas</tt> with proper screen dimensions
+  # and a <tt>Sortviz::Cursor</tt>.
   #
   # It also generates a shuffled list of numbers counting from 1 to n, n is 
-  # decided by Sortviz::Visualizer#generate_list which calculates the number
+  # decided by <tt>Sortviz::Visualizer#generate_list</tt> which calculates the number
   # of bar charts that can be drawn given the current screen size.
   #
-  # _Notice_: Curses coordinates are treated in reverse, (y, x) and x represents
+  # <em>Notice</em>: Curses coordinates are treated in reverse, (y, x) and x represents
   # the number of columns, y represents the number of lines so
-  # *(y, x)* is *(cols, lines)*. As a result of that we too, use _(y, x)_.
+  # <em>(y, x)</em> is <em>(cols, lines)</em>. As a result of that we too, use <em>(y, x)</em>.
   class Visualizer
-    # Origin starts at (1, 0) not 
+    # Origin starts at (1, 0) not (0, 0)
     ORIGIN = { y: 1, x: 5 }
     SLEEP_INTERVAL = 0.05
 
     # Initializes a new Visualizer for a sorting algorithm
+    #
     # Params:
-    # +algo+:: +Symbol+ A symbol representing a sorting algorithm method
+    # +algo+:: <tt>Symbol</tt> A symbol representing a sorting algorithm method
     def initialize(algo)
       setup_curses
       @screen_dim = { cols: Curses.cols - ORIGIN[:x], lines: Curses.lines }
@@ -31,28 +32,28 @@ module Sortviz
 
     # Starts the actual visualization
     # * First prints the program's banner
-    # * Sets up the canvas (+Sortviz::Canvas+)
+    # * Sets up the canvas (<tt>Sortviz::Canvas</tt>)
     # * Caches the cursor location so we can return to our original location later
     # * Refreshes the current standard screen first
     # * Refreshes the canvas
-    # * Finally we switch input to the canvas through +Sortviz::Cursor#switch_window+
+    # * Finally we switch input to the canvas through <tt>Sortviz::Cursor#switch_window</tt>
     #
     # The order is important because curses works in such a way that the last
     # thing on display is the last thing refreshed, if we had refreshed canvas
     # first, it would have been drawn normally, then we refresh the standard
     # screen (in which the canvas is inside) it'll do just that refreshs and overrides the canvas.
     #
-    # === The loop
+    # ==== The loop
     # In order to draw every returned partially sorted list from the algorithm method
     # we have to loop, clearing the canvas everytime and redrawing it then telling
     # Curses to apply these drawn updates. This helps with flicker but I still
-    # seem to be getting some of it ever since I introduced the +Curses::A_REVERSE+
+    # seem to be getting some of it ever since I introduced the <tt>Curses::A_REVERSE</tt>
     # attribute.
     #
     # Durring the loop, we're trapped inside the sorting method, as a block of code
     # that gets yielded to on every iteration of the sorting algorithm. To exit that
     # at anytime during the sorting run, we capture the keyboard and return if any key is pressed,
-    # the canvas has +Curses::Window#getch+ on non-block mode so it doesn't block waiting for a character.
+    # the canvas has <tt>Curses::Window#getch</tt> on non-block mode so it doesn't block waiting for a character.
     #
     # Finally, we make sure both the canvas and the standard screen are closed.
     # It's important to note that we also poll on keyboard after we exit the sorting method.

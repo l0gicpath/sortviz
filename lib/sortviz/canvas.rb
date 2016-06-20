@@ -9,8 +9,8 @@ module Sortviz
     attr_reader :window
 
     # Initializes a new instance with a title to display, the current cursor
-    # object (+Sortviz::Cursor+) and the modified screen dimensions from the
-    # parent window/screen (standard screen created in +Sortviz::Visualizer+)
+    # object (<tt>Sortviz::Cursor</tt>) and the modified screen dimensions from the
+    # parent window/screen (standard screen created in <tt>Sortviz::Visualizer</tt>)
     def initialize(title, cursor, screen_dim)
       @screen_dim = screen_dim
       @cursor = cursor
@@ -19,7 +19,7 @@ module Sortviz
     end
 
     # Does the initial setup of creating an actual curses window, adding a 
-    # border to it and setting up non-blocking +Curses::Window#getch+
+    # border to it and setting up non-blocking <tt>Curses::Window#getch</tt>
     def setup
       @window ||= Curses::Window.new(
         @screen_dim[:lines] - MARGIN, 
@@ -55,7 +55,7 @@ module Sortviz
     end
 
     private
-    
+
     def draw_bar(height, highlighted)
       attr = highlighted ? @red_highlight : Curses::A_REVERSE
       attron(attr)
