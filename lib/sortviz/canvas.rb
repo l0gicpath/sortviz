@@ -9,7 +9,6 @@ module Sortviz
     CANVAS_HEIGHT = 20  # That's our drawing area
     CANVAS_GUTTER = 50  # We subtract this value from Curses.cols
     GUTTER = 5
-    GRAY_COLOR = 8
 
     attr_reader :window
 
@@ -18,14 +17,14 @@ module Sortviz
       @cursor = cursor
       @title = title
       # Cache red since we'll use it to highlight later, best do it now
-      @red_highlighter = Curses.color_pair(Curses.const_get("COLOR_RED"))
+      @red_highlight = Curses.color_pair(Curses.const_get("COLOR_RED"))
       @window = nil
     end
 
     def setup
       @window = Curses::Window.new(
-        @cursor.y + CANVAS_HEIGHT, 
-        @screen_dim[:cols] - CANVAS_GUTTER,
+        @screen_dim[:lines] - GUTTER, 
+        @screen_dim[:cols] - GUTTER,
         @cursor.y, @cursor.x)
       @window.box('|', '-')
       # Update our y-position to reflect the addition of canvas and its height
@@ -45,20 +44,23 @@ module Sortviz
         @cursor.decr_y
 
 
-        attron(@red_highlighter) if selected_indx == i
-        draw_bar(n)
-        attroff(@red_highlighter)
+        # attron(@red_highlighter) if selected_indx == i
+        draw_bar(n, selected_indx == i)
+        # attroff(@red_highlighter)
 
         @cursor.move_y(CANVAS_HEIGHT + 2)
         @cursor.incr_x GUTTER
       end
     end
     private
-    def draw_bar(height)
+    def draw_bar(height, highlighted)
+      attr = highlighted ? @red_highlight : Curses::A_REVERSE
+      @window.attron(attr)
       height.times do
-        tprint("|_ |")
+        @window.addstr(" ".center(4)) # 4 spaces
         @cursor.decr_y
       end
+      @window.attroff(attr)
     end
   end
 end

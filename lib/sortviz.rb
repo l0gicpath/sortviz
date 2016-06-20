@@ -12,7 +12,7 @@ Dir[libdir + '/algorithms/*.rb'].each {|file| require file }
 module Sortviz
   extend self
   def init(algo)
-    unsorted_list = (1..20).to_a.shuffle
+    unsorted_list = (1..10).to_a.shuffle
     visualizer = Visualizer.new unsorted_list, algo
     visualizer.visualize
   end

@@ -5,19 +5,17 @@ module Sortviz
   class Visualizer
     extend Forwardable
     def_delegators :@cursor, :tprint, :newline 
-    # All our rendering kicks off from these two values, consider them
-    # our origin point instead of (0, 0)
-    GUTTER = 5          # We don't want to flirt too much with the terminal border
-    TOP_MARGIN = 1      # Same issue with the top border
-    SLEEP_INTERVAL = 0.3
+
+    ORIGIN = { y: 1, x: 5 }
+    SLEEP_INTERVAL = 0.005
 
     def initialize(unsorted_list, algo)
       setup_curses
       # Cache our dimensions, helpful in calculations
-      @screen_dim = { cols: Curses.cols, lines: Curses.lines }
+      @screen_dim = { cols: Curses.cols - ORIGIN[:x], lines: Curses.lines }
       # Take Reference for Curses initial standard window
       @screen     = Curses.stdscr
-      @cursor     = Cursor.new(@screen, TOP_MARGIN, GUTTER)
+      @cursor     = Cursor.new(@screen, ORIGIN)
       @canvas     = Canvas.new(ALGORITHMS[algo], @cursor, @screen_dim)
 
       @algo       = algo
@@ -41,11 +39,10 @@ module Sortviz
         loop do
            Sortviz.send(@algo, @unsorted_list) do |partially_sorted, selected_indx|
             @canvas.redraw(partially_sorted, selected_indx)
-            update
-            return if @canvas.getch == 'q'
+            Curses.doupdate
+            sleep SLEEP_INTERVAL
+            return if @canvas.getch
            end
-          @canvas.close
-
           @cursor.switch_window @screen # Switch back to our stdscr
           @cursor.restore # Restoring here, would place us right under the canvas box
           newline
@@ -53,29 +50,22 @@ module Sortviz
           break if Curses.getch == 'q'
         end
       ensure
+        @canvas.close
         Curses.close_screen
       end
     end
 
     private
-    def update
-      # doupdate is much more efficient than multiple refreshes
-      # and after some testing, it seems to clear out the flicker
-      # caused by multiple rapid calls to refresh
-      Curses.doupdate
-      sleep SLEEP_INTERVAL
-    end
 
     def setup_curses
       Curses.init_screen
-      Curses.noecho       # As soon as we prep the terminal screen, stop echo
-      Curses.nonl         # Line feeds and carriage return as well
+      Curses.noecho
       Curses.curs_set(0)        # Hide cursor
       Curses.start_color        # Kick off colored output
       Curses.use_default_colors
 
       # We need Red
-      Curses.init_pair(Curses::COLOR_RED, Curses::COLOR_RED, -1)
+      Curses.init_pair(Curses::COLOR_RED, -1, Curses::COLOR_RED)
     end
 
     def banner

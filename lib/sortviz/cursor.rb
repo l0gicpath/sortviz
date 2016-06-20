@@ -13,10 +13,9 @@ module Sortviz
     # => y      (Int)
     # => x      (Int)
     # @return instance of Sortviz::Cursor
-    def initialize(window, y, x)
+    def initialize(window, origin)
       @window = window
-      @cached = nil
-      move(y, x)
+      move(origin[:y], origin[:x])
     end
 
     # Move to positions y, x
