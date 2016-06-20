@@ -40,6 +40,9 @@ module Sortviz
       @cursor.tprint("Algorithm: #{@title}")
 
       len = partially_sorted.join.center(4).length
+
+      # We draw bottom up, this sets our y-position at the very bottom of
+      # the canvas and our x-position half way through the canvas
       @cursor.move(@window.maxy - 1, (@window.maxx - len) / MARGIN)
       
       partially_sorted.each_with_index do |number, i|
@@ -49,6 +52,7 @@ module Sortviz
 
         draw_bar(number, selected_indx == i)
 
+        # Reset our y-position
         @cursor.move_y(@window.maxy - 1)
         @cursor.incr_x MARGIN
       end
@@ -60,7 +64,7 @@ module Sortviz
       attr = highlighted ? @red_highlight : Curses::A_REVERSE
       attron(attr)
       height.times do
-        @window.addstr(" ".center(4)) # 4 spaces
+        @cursor.tprint(" ".center(4)) # 4 spaces
         @cursor.decr_y
       end
       attroff(attr)
