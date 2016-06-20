@@ -9,7 +9,7 @@ module Sortviz
     ORIGIN = { y: 1, x: 5 }
     SLEEP_INTERVAL = 0.005
 
-    def initialize(unsorted_list, algo)
+    def initialize(algo)
       setup_curses
       # Cache our dimensions, helpful in calculations
       @screen_dim = { cols: Curses.cols - ORIGIN[:x], lines: Curses.lines }
@@ -19,7 +19,7 @@ module Sortviz
       @canvas     = Canvas.new(ALGORITHMS[algo], @cursor, @screen_dim)
 
       @algo       = algo
-      @unsorted_list = unsorted_list
+      @unsorted_list = generate_list
     end
 
     def visualize
@@ -46,8 +46,8 @@ module Sortviz
           @cursor.switch_window @screen # Switch back to our stdscr
           @cursor.restore # Restoring here, would place us right under the canvas box
           newline
-          tprint("Press 'q' to exit")
-          break if Curses.getch == 'q'
+          tprint("Press any key to exit")
+          break if Curses.getch
         end
       ensure
         @canvas.close
@@ -56,7 +56,6 @@ module Sortviz
     end
 
     private
-
     def setup_curses
       Curses.init_screen
       Curses.noecho
@@ -64,8 +63,17 @@ module Sortviz
       Curses.start_color        # Kick off colored output
       Curses.use_default_colors
 
-      # We need Red
+      # We only need Red
       Curses.init_pair(Curses::COLOR_RED, -1, Curses::COLOR_RED)
+    end
+
+    # We want to know how much can we draw depending on the window size
+    # To do that, we know that a single bar takes up 4 columns |00|
+    # And it also has roughly two columsn on each of its sides so thats 8 in total
+    # So we take cols/single-bar-cols = n_bars
+    def generate_list
+      n = @screen_dim[:cols] / 8 + 1 # Rounding up, it usually results in things like 9, 19
+      (1..n).to_a.shuffle
     end
 
     def banner
