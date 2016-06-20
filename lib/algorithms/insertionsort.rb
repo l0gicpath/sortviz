@@ -1,5 +1,4 @@
-Sortviz.Algorithms.define do
-  display_name 'Insertion Sort'
+Sortviz::Algorithms.define 'Insertion Sort' do
   author 'Emad Elsaid'
   url 'https://coderwall.com/p/z8vowg/simple-sorting-algorithms-with-ruby'
   name :'insertion-sort'

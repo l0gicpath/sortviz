@@ -1,5 +1,4 @@
-Sortviz.Algorithms.define do
-  display_name 'Bubble Sort'
+Sortviz::Algorithms.define 'Bubble Sort' do
   author 'ieatkimchi'
   url 'https://github.com/ieatkimchi/Bubble_Sort_Ruby'
   name :'bubble-sort'

@@ -1,5 +1,4 @@
-Sortviz.Algorithms.define do
-  display_name 'Selection Sort'
+Sortviz::Algorithms.define 'Selection Sort' do
   author 'Emad Elsaid'
   url 'https://coderwall.com/p/z8vowg/simple-sorting-algorithms-with-ruby'
   name :'selection-sort'

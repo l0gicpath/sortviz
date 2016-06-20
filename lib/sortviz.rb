@@ -4,7 +4,7 @@ require 'sortviz/version'
 require 'sortviz/cursor'
 require 'sortviz/canvas'
 require 'sortviz/visualizer'
-require 'sortviz/plugins'
+require 'sortviz/algorithms'
 
 libdir = File.dirname(__FILE__) 
 Dir[libdir + '/algorithms/*.rb'].each {|file| require file }
