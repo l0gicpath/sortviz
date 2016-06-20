@@ -11,7 +11,7 @@ module Sortviz
 
       # then swap it
       list[j], list[iMin] = list[iMin], list[j]
-      yield list, iMin
+      yield list, j
     end
   end
 
