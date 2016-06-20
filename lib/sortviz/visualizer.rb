@@ -3,9 +3,6 @@ module Sortviz
   # happens. It initializes the curses library, visualizes sorting, 
   # cleans up after we're done and controls the event loop.
   class Visualizer
-    extend Forwardable
-    def_delegators :@cursor, :tprint, :newline 
-
     ORIGIN = { y: 1, x: 5 }
     SLEEP_INTERVAL = 0.005
 
@@ -45,8 +42,8 @@ module Sortviz
            end
           @cursor.switch_window @screen # Switch back to our stdscr
           @cursor.restore # Restoring here, would place us right under the canvas box
-          newline
-          tprint("Press any key to exit")
+          @cursor.newline
+          @cursor.tprint("Press any key to exit")
           break if Curses.getch
         end
       ensure
@@ -68,21 +65,23 @@ module Sortviz
     end
 
     # We want to know how much can we draw depending on the window size
-    # To do that, we know that a single bar takes up 4 columns |00|
-    # And it also has roughly two columsn on each of its sides so thats 8 in total
-    # So we take cols/single-bar-cols = n_bars
+    # To do that, we know that a single bar takes up 4 columns |00| (bar-len)
+    # We also know that we add tw5 columns between bars (Canvas::MARGIN)
+    # So we take cols/bar-len + CANVAS::MARGIN = n_bars
     def generate_list
-      n = @screen_dim[:cols] / 8 + 1 # Rounding up, it usually results in things like 9, 19
+      n = @screen_dim[:cols] / (4 + Canvas::MARGIN)
       (1..n).to_a.shuffle
     end
 
     def banner
-      tprint("-----------------------------------------------------------------")
-      newline
-      tprint("SortViz: Sorting Algorithms Visualization, Ruby & Curses - v#{VERSION}")
-      newline
-      tprint("-----------------------------------------------------------------")
-      newline
+      @cursor.tap do |c|
+        c.tprint("-----------------------------------------------------------------")
+        c.newline
+        c.tprint("SortViz: Sorting Algorithms Visualization, Ruby & Curses - v#{VERSION}")
+        c.newline
+        c.tprint("-----------------------------------------------------------------")
+        c.newline
+      end
     end
 
   end
