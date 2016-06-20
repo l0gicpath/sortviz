@@ -6,7 +6,7 @@ describe Sortviz::Cursor do
     allow(@screen).to receive(:setpos)
   end
 
-  subject { Sortviz::Cursor.new(@screen, 0, 0) }
+  subject { Sortviz::Cursor.new(@screen, {y: 0, x: 0}) }
 
   it 'can create cursor and update its y, x position correctly' do
     expect(subject.y).to eq(0)
