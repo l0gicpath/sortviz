@@ -13,7 +13,7 @@ module Sortviz
   class Visualizer
     # Origin starts at (1, 0) not 
     ORIGIN = { y: 1, x: 5 }
-    SLEEP_INTERVAL = 0.005
+    SLEEP_INTERVAL = 0.05
 
     # Initializes a new Visualizer for a sorting algorithm
     # Params:
