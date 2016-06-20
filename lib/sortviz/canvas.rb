@@ -1,10 +1,16 @@
 module Sortviz
+  # Canvas is the portion of the screen that contains the sorting bar charts.
+  # It displays the partially sorted list of numbers and redraws on every iteration
+  # marking the currently selected bar (current index in the partially sorted list)
   class Canvas
     extend Forwardable
     def_delegators :@window, :refresh, :getch, :close, :attron, :attroff
     MARGIN = 5
     attr_reader :window
 
+    # Initializes a new instance with a title to display, the current cursor
+    # object (+Sortviz::Cursor+) and the modified screen dimensions from the
+    # parent window/screen (standard screen created in +Sortviz::Visualizer+)
     def initialize(title, cursor, screen_dim)
       @screen_dim = screen_dim
       @cursor = cursor
@@ -12,6 +18,8 @@ module Sortviz
       @red_highlight = Curses.color_pair(Curses.const_get("COLOR_RED"))
     end
 
+    # Does the initial setup of creating an actual curses window, adding a 
+    # border to it and setting up non-blocking +Curses::Window#getch+
     def setup
       @window ||= Curses::Window.new(
         @screen_dim[:lines] - MARGIN, 
@@ -21,6 +29,9 @@ module Sortviz
       @window.nodelay = 1 # Non-blocking mode for #getch
     end
 
+    # Draws the partially sorted list and highlights the current index
+    # It also attempts to center the graph in the display area, does well but
+    # not always, sometimes it'll be shifted to the right a bit.
     def redraw(partially_sorted, selected_indx)
       @window.clear
       @window.box('|', '-')
@@ -42,7 +53,9 @@ module Sortviz
         @cursor.incr_x MARGIN
       end
     end
+
     private
+    
     def draw_bar(height, highlighted)
       attr = highlighted ? @red_highlight : Curses::A_REVERSE
       attron(attr)

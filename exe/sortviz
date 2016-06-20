@@ -1,5 +1,12 @@
 #! /usr/bin/env ruby
 
+# Sortviz is a small terminal program written in Ruby and uses the Curses library
+# It lets you visualize sorting algorithms
+#
+# Author::    Hady Ahmed  (mailto:me@hadyahmed.com)
+# Copyright:: Copyright (c) 2016
+# License::   Distributes under MIT
+
 require 'optparse'
 require "sortviz"
 
