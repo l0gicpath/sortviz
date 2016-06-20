@@ -61,14 +61,11 @@ Because I'm a terminal guy that's why. I like to think I'm not too
 bad googling either and for the life of me I couldn't find anything similar
 when a buddy of mine that teaches CS at a university was like, I need a terminal based sorting visualizer. I'm like PSH! Like there has to be some out there, lo-and-behold, they're all web and javascript based.
 
-I'm also using this as a demo for an interview, hope it works out. They asked
-for code I'm most proud of, pretty hard question to find an answer to, as it turns out.
-It's not like I write code I'm not generally proud of but yeah, was a real
-bummer looking over everything I worked in, so this is my solution.
+I was asked for code I'm most proud of, a pretty hard question to find an answer to, as it turns out. It's not like I write code I'm not generally proud of but yeah, was a real bummer looking over everything I worked in, so this is my solution.
 
-Am I proud of it? Well yes, could be way better but I'm pressed on time.
+Am I proud of it? Well yes, I'm improving it by time.
 
-*I also realized the notion of being proud of something is more of a process, after you've invested time and effort into something and grew it, you can't help but feel proud of it.*
+*I realized the notion of being proud of something is more of a process, after you've invested time and effort into something and grew it, you can't help but feel proud of it.*
 
 ## Future
 
