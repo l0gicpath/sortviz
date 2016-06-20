@@ -1,19 +1,20 @@
-module Sortviz
-  # selection_sort is brought in from
-  # https://coderwall.com/p/z8vowg/simple-sorting-algorithms-with-ruby
-  def selectionsort(list)
-    (0...list.size).each do |j|
+Sortviz.Algorithms.define do
+  display_name 'Selection Sort'
+  author 'Emad Elsaid'
+  url 'https://coderwall.com/p/z8vowg/simple-sorting-algorithms-with-ruby'
+  name :'selection-sort'
+
+  sort do |unsorted_list|
+    (0...unsorted_list.size).each do |j|
       # find index of minimum element in the unsorted part 
       iMin = j
-      (j+1...list.size).each do |i|
-        iMin = i if list[i] < list[iMin]
+      (j+1...unsorted_list.size).each do |i|
+        iMin = i if unsorted_list[i] < unsorted_list[iMin]
       end
 
       # then swap it
-      list[j], list[iMin] = list[iMin], list[j]
-      yield list, j
+      unsorted_list[j], unsorted_list[iMin] = unsorted_list[iMin], unsorted_list[j]
+      yield unsorted_list, j
     end
   end
-
-  define_algorithm "Selection Sort", :selectionsort
 end

@@ -1,16 +1,17 @@
-module Sortviz
-  # insertion_sort is brought in from
-  # https://coderwall.com/p/z8vowg/simple-sorting-algorithms-with-ruby  
-  def insertionsort(list)
-    (1...list.size).each do |i|
+Sortviz.Algorithms.define do
+  display_name 'Insertion Sort'
+  author 'Emad Elsaid'
+  url 'https://coderwall.com/p/z8vowg/simple-sorting-algorithms-with-ruby'
+  name :'insertion-sort'
+
+  sort do |unsorted_list|
+    (1...unsorted_list.size).each do |i|
       j = i
-      while j > 0 and list[j-1] > list[j]
-        list[j], list[j-1] = list[j-1], list[j]
+      while j > 0 and unsorted_list[j-1] > unsorted_list[j]
+        unsorted_list[j], unsorted_list[j-1] = unsorted_list[j-1], unsorted_list[j]
         j = j - 1
-        yield list, j
+        yield unsorted_list, j
       end
     end
   end
-
-  define_algorithm "Insertion Sort", :insertionsort
 end
