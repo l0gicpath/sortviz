@@ -31,7 +31,7 @@ module Sortviz
     # Draws the partially sorted list and highlights the current index
     # It also attempts to center the graph in the display area, does well but
     # not always, sometimes it'll be shifted to the right a bit.
-    def redraw(partially_sorted, selected_indx)
+    def draw(partially_sorted, selected_indx)
       clear
       draw_title
 
@@ -45,6 +45,8 @@ module Sortviz
         draw_bar(number, selected_indx == i)
         next_bar
       end
+      
+      Curses.doupdate
     end
 
     private

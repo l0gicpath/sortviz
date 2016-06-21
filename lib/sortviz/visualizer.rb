@@ -17,7 +17,7 @@ module Sortviz
     # Initializes a new Visualizer for a sorting algorithm
     #
     # Params:
-    # +algo+:: <tt>Symbol</tt> A symbol representing a sorting algorithm method
+    # +args+:: <tt>Struct</tt> Command line args that configure how visualization will happen
     def initialize(args)
       setup_curses
       @screen_dim = { cols: Curses.cols - ORIGIN[:x], lines: Curses.lines }
@@ -73,8 +73,7 @@ module Sortviz
 
         loop do
           Algorithms.do_sort(@algorithm, @unsorted_list) do |partially_sorted, selected_indx|
-            @canvas.redraw(partially_sorted, selected_indx)
-            Curses.doupdate
+            @canvas.draw(partially_sorted, selected_indx)
             sleep @sorting_speed
             return if @canvas.getch
           end
