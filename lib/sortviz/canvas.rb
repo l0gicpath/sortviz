@@ -25,7 +25,6 @@ module Sortviz
         @screen_dim[:lines] - MARGIN, 
         @screen_dim[:cols] - MARGIN,
         @cursor.y, @cursor.x)
-      @window.box('|', '-')
       @window.nodelay = 1 # Non-blocking mode for #getch
     end
 
@@ -33,32 +32,37 @@ module Sortviz
     # It also attempts to center the graph in the display area, does well but
     # not always, sometimes it'll be shifted to the right a bit.
     def redraw(partially_sorted, selected_indx)
-      @window.clear
-      @window.box('|', '-')
-      
-      @cursor.move(0, 0)
-      @cursor.tprint("Algorithm: #{@title}")
+      clear
+      draw_title
 
       len = partially_sorted.join.center(4).length
-
       # We draw bottom up, this sets our y-position at the very bottom of
       # the canvas and our x-position half way through the canvas
       @cursor.move(@window.maxy - 1, (@window.maxx - len) / MARGIN)
       
       partially_sorted.each_with_index do |number, i|
-        @cursor.tprint(("|%02d|" % number))
-
-        @cursor.decr_y
-
+        draw_number(number)
         draw_bar(number, selected_indx == i)
-
-        # Reset our y-position
-        @cursor.move_y(@window.maxy - 1)
-        @cursor.incr_x MARGIN
+        next_bar
       end
     end
 
     private
+
+    def clear
+      @window.clear
+      @window.box('|', '-')
+    end
+
+    def draw_title
+      @cursor.move(0, 0)
+      @cursor.tprint("Algorithm: #{@title}")
+    end
+
+    def draw_number(number)
+      @cursor.tprint(("|%02d|" % number))
+      @cursor.decr_y
+    end
 
     def draw_bar(height, highlighted)
       attr = highlighted ? @red_highlight : Curses::A_REVERSE
@@ -68,6 +72,11 @@ module Sortviz
         @cursor.decr_y
       end
       attroff(attr)
+    end
+
+    def next_bar
+      @cursor.move_y(@window.maxy - 1)
+      @cursor.incr_x MARGIN
     end
   end
 end
