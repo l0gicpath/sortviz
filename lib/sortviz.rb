@@ -1,6 +1,7 @@
 require 'curses'
 require 'forwardable'
 require 'sortviz/version'
+require 'sortviz/core_ext'
 require 'sortviz/cursor'
 require 'sortviz/canvas'
 require 'sortviz/visualizer'
@@ -14,7 +15,7 @@ module Sortviz
 
   def find_algorithm(algorithm)
     return nil if algorithm.nil?
-    Algorithms.plugins.find_index { |plugin| plugin[:name] == algorithm.to_sym }
+    Algorithms.plugins.find { |plugin| plugin[:name] == algorithm.to_sym }.freeze
   end
 
   def init(args)

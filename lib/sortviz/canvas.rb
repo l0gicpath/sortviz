@@ -11,10 +11,10 @@ module Sortviz
     # Initializes a new instance with a title to display, the current cursor
     # object (<tt>Sortviz::Cursor</tt>) and the modified screen dimensions from the
     # parent window/screen (standard screen created in <tt>Sortviz::Visualizer</tt>)
-    def initialize(algorithm, cursor, screen_dim)
+    def initialize(title, cursor, screen_dim)
       @screen_dim = screen_dim
       @cursor = cursor
-      @title = Algorithms.plugins[algorithm][:display_name]
+      @title = title
       @red_highlight = Curses.color_pair(Curses.const_get("COLOR_RED"))
     end
 
@@ -31,7 +31,7 @@ module Sortviz
     # Draws the partially sorted list and highlights the current index
     # It also attempts to center the graph in the display area, does well but
     # not always, sometimes it'll be shifted to the right a bit.
-    def draw(partially_sorted, selected_indx)
+    def draw(partially_sorted, selection)
       clear
       draw_title
 
@@ -42,7 +42,7 @@ module Sortviz
       
       partially_sorted.each_with_index do |number, i|
         draw_number(number)
-        draw_bar(number, selected_indx == i)
+        draw_bar(number, i == selection)
         next_bar
       end
       

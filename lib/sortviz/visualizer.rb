@@ -26,7 +26,7 @@ module Sortviz
 
       @algorithm  = args.algorithm
 
-      @canvas     = Canvas.new(@algorithm, @cursor, @screen_dim)
+      @canvas     = Canvas.new(@algorithm[:display_name], @cursor, @screen_dim)
 
       @sorting_speed = args.speed
       @unsorted_list = generate_list
@@ -71,9 +71,10 @@ module Sortviz
         
         @cursor.switch_window @canvas.window
 
-        loop do
-          Algorithms.do_sort(@algorithm, @unsorted_list) do |partially_sorted, selected_indx|
-            @canvas.draw(partially_sorted, selected_indx)
+        while true do
+          result = @algorithm[:sort].call(@unsorted_list)
+          result.versions.each do |version|
+            @canvas.draw(version[0], version[1])
             sleep @sorting_speed
             return if @canvas.getch
           end
