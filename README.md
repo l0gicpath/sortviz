@@ -1,5 +1,7 @@
 # Sortviz
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/l0gicpath/sortviz)
+
 Sortviz is a small terminal program written in Ruby and uses the Curses library
 It lets you visualize sorting algorithms, you can add more sorting algorithms
 at will but for the time being it can only load the ones bundled with itself.
